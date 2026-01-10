@@ -80,7 +80,7 @@ def manthan():
     if args.verbose:
         print(" c count X (universally quantified variables) variables", len(Xvar))
         print(" c count Y (existentially quantified variables) variables", len(Yvar))
-    
+
     if args.verbose >= 2:
         print(" c  X (universally quantified variables) variables", (Xvar))
         print(" c  Y (existentially quantified variables) variables",(Yvar))
@@ -234,7 +234,12 @@ def manthan():
     including X and Y.
     '''
 
-    print(" c generating samples")
+    print(" c generating samples for %s variables" % (len(Yvar) - len(UniqueVars) - len(Unates)))
+    print(" c generating samples for vars: ", end=' ')
+    for var in Yvar:
+        if (var not in UniqueVars) and (var not in Unates):
+            print("%s" % (var), end=' ')
+    print("")
 
     sampling_cnf = cnfcontent
 
@@ -315,12 +320,13 @@ def manthan():
 
     end_time_learn = time.time()
 
+    print(" c learned candidate functions for %s variables. T: %lf " % (len(candidateSkf), end_time_learn-start_time_learn))
+
     if args.logtime:
-        logtime(inputfile_name, "candidate learning:" +
-                str(end_time_learn-start_time_learn))
+        logtime(inputfile_name, "candidate learning:" + str(end_time_learn-start_time_learn))
 
     '''
-    YvarOrder is a total order of Y variables that represents interdependecies among Y. 
+    YvarOrder is a total order of Y variables that represents interdependecies among Y.
     '''
 
     YvarOrder = np.array(list(nx.topological_sort(dg)))
@@ -335,7 +341,7 @@ def manthan():
     '''
     createSkolem(candidateSkf, Xvar, Yvar, UniqueVars,
                  UniqueDef, inputfile_name)
-    
+
     if args.verbose >=2:
         print("c learned candidate functions", candidateSkf)
 
@@ -378,8 +384,8 @@ def manthan():
             if args.verbose:
                 print(" c no more repair needed")
                 print(" c number of repairs needed to converge", countRefine)
-            
-            
+
+
 
             createSkolemfunction(inputfile_name, Xvar, Yvar)
 
@@ -398,7 +404,7 @@ def manthan():
                 print(" c verification check is SAT, we have counterexample to fix")
                 print(" c number of repair", countRefine)
                 print(" c finding candidates to repair using maxsat")
-            
+
             if args.verbose >=2:
                 print("counter example to repair", sigma)
 
@@ -407,7 +413,7 @@ def manthan():
 
             ind = callMaxsat(
                 args, config, maxsatcnfRepair, sigma[2], UniqueVars + Unates, Yvar, YvarOrder, inputfile_name)
-            
+
             if args.verbose >= 2:
                 print("candidates to repair", ind)
 
@@ -431,9 +437,9 @@ def manthan():
 
             '''
 
-            if we encounter too many repair candidates while repair the previous identifed candidates ind, 
+            if we encounter too many repair candidates while repair the previous identifed candidates ind,
             we call lexmaxsat to identify nicer candidates to repair in accordance with the dependencies.
-            
+
             '''
 
             if lexflag and args.lexmaxsat:
@@ -458,7 +464,7 @@ def manthan():
                         UniqueVars + Unates, sigma, inputfile_name, args, HenkinDep)
 
             '''
-            update the repair candidates in the candidate Skolem 
+            update the repair candidates in the candidate Skolem
             '''
 
             updateSkolem(repairfunctions, countRefine,
@@ -500,7 +506,7 @@ if __name__ == "__main__":
     parser.add_argument("--preprocess", type=int,
                         help=" to enable (=1) or disable (=0) unate function finding. Default 1", default=1, dest='preprocess')
     parser.add_argument(
-        "--multiclass", 
+        "--multiclass",
         help="to learn a subset of existentially quantified variables together use --multiclass ", action='store_true')
     parser.add_argument(
         "--lexmaxsat", help="to use lexicographical maxsat to find candidates to repair use --lexmaxsat ", action='store_true')
@@ -520,7 +526,7 @@ if __name__ == "__main__":
     print(" c configuring dependency paths")
     '''
     Paths of dependencies are set.
-    if installed by source then their corresponding 
+    if installed by source then their corresponding
     paths are read by "manthan_dependencies.cfg"
     else default is dependencies folder.
     '''
@@ -539,30 +545,30 @@ if __name__ == "__main__":
 
     if not config.has_section('Dependencies-Path'):
         print(" c Did not install dependencies from source code, using precomplied binaries")
-        config.add_section('Dependencies-Path') 
+        config.add_section('Dependencies-Path')
         config.set('Dependencies-Path', 'openwbo_path','./dependencies/static_bin/open-wbo')
         config.set('Dependencies-Path', 'cmsgen_path','./dependencies/static_bin/cmsgen')
         config.set('Dependencies-Path', 'picosat_path','./dependencies/static_bin/picosat')
         config.set('Dependencies-Path', 'preprocess_path','./dependencies/static_bin/preprocess')
         config.set('Dependencies-Path', 'file_generation_cex_path','./dependencies/static_bin/file_generation_cex')
-    
+
     else:
-    
+
         if not config.has_option('Dependencies-Path', 'openwbo_path'):
             config.set('Dependencies-Path', 'openwbo_path','./dependencies/static_bin/open-wbo')
 
         if not config.has_option('Dependencies-Path', 'cmsgen_path'):
             config.set('Dependencies-Path', 'cmsgen_path','./dependencies/static_bin/cmsgen')
-        
+
         if not config.has_option('Dependencies-Path', 'picosat_path'):
             config.set('Dependencies-Path', 'picosat_path','./dependencies/static_bin/picosat')
-        
+
         if not config.has_option('Dependencies-Path', 'preprocess_path'):
             config.set('Dependencies-Path', 'preprocess_path','./dependencies/static_bin/preprocess')
 
         if not config.has_option('Dependencies-Path', 'file_generation_cex_path'):
             config.set('Dependencies-Path', 'file_generation_cex_path','./dependencies/static_bin/file_generation_cex')
-        
+
     if args.verbose >= 2:
         print(" c printing dependencies path")
         print(" c preprocess path: %s" %(config['Dependencies-Path']['preprocess_path']))
@@ -572,6 +578,6 @@ if __name__ == "__main__":
         print(" c picosat path: %s" %(config['Dependencies-Path']['picosat_path']))
 
 
-    
+
     print(" c starting Manthan")
     manthan()
