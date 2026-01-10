@@ -21,7 +21,7 @@ pararser() {
                         echo "c setting building all dependencies on"
                     fi
                 fi
-            else   
+            else
                 declare -g $param="$2"
             fi
         fi
@@ -39,12 +39,13 @@ cd $unique
 if test -d "build"; then
     echo "c unique/build dir exists."
     echo "c clearing it"
-    rm -r build
+    # rm -r build
 fi
 mkdir build
 cd build
 export PATH=$HOME/.local/bin:$PATH
 cmake .. && echo "c cmake to unique succeeded" || exit
+make clean
 make -j8 && echo "c make to unique succeeded" || exit
 if test -f "interpolatingsolver/src/itp."*; then
     echo "c found itp module"
@@ -70,6 +71,7 @@ if [ "$all" = "yes" ]; then
         echo "c installing ABC"
 
         cd $abc
+        make clean
         make -j8 libabc.a && echo "c make to ABC succeeded" || exit
 
         gcc -Wall -g -c file_generation_cex.c -o file_generation_cex.o  && echo "c file_generation_cex complied" || exit
@@ -79,7 +81,7 @@ if [ "$all" = "yes" ]; then
             echo "c $file_generation_cex exists."
             file_generation_cex_path=$(realpath $file_generation_cex)
             echo "file_generation_cex_path = "$file_generation_cex_path >> $CFG_FILE
-        else 
+        else
             echo "ERROR! could not found $file_generation_cex"
             echo "ERROR! check ABC install and follow readme in build_dependencies/abc"
             exit
@@ -98,6 +100,7 @@ if [ "$all" = "yes" ]; then
         mkdir build
         cd build
         cmake .. && echo "c cmake to cmsgen succeeded" || exit
+        make clean
         make -j8 && echo "c make to cmsgen succeeded" || exit
         cmsgen_exe=cmsgen
         if test -f "$cmsgen_exe"; then
@@ -105,7 +108,7 @@ if [ "$all" = "yes" ]; then
             cmsgen_path=$(realpath $cmsgen_exe)
             echo "cmsgen_path = " $cmsgen_path >> $CFG_FILE
 
-        else 
+        else
             echo "Error! could not found $cmsgen_exe"
             echo "Error! check cmsgen install and follow readme in build_dependencies/cmsgen"
             exit
@@ -138,6 +141,7 @@ if [ "$all" = "yes" ]; then
 
         echo "c installing picosat"
         cd $picosat
+        make clean
         ./configure.sh && echo "c configuration to picosat succeeded" || exit
         make -j4  && echo "c make to picosat succeeded" || exit
         picosat_exe=picosat
@@ -145,7 +149,7 @@ if [ "$all" = "yes" ]; then
             echo "c $picosat_exe exists."
             picosat_path=$(realpath $picosat_exe)
             echo "picosat_path = " $picosat_path >> $CFG_FILE
-        else 
+        else
             echo "Error! could not found $picosat_exe"
             echo "Error! check picosat install and follow readme in build_dependencies/picosat"
             exit
@@ -164,6 +168,7 @@ if [ "$all" = "yes" ]; then
         mkdir build
         cd build
         cmake .. && echo "c cmake to louvain-community succeeded" || exit
+        make clean
         make -j8 && echo "c make to louvain-community succeeded" || exit
         echo "c louvain-community path set done"
         echo "c install cryptominisat"
@@ -177,6 +182,7 @@ if [ "$all" = "yes" ]; then
         mkdir build
         cd build
         cmake -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit
+        make clean
         make -j8 && echo "c make to cryptominisat succeeded" || exit
         cd ../..
         echo "c installing preprocess"
@@ -188,13 +194,14 @@ if [ "$all" = "yes" ]; then
         mkdir build
         cd build
         cmake .. && echo "c cmake to preprocess succeeded" || exit
+        make clean
         make -j8 && echo "c make to preprocess succeeded" || exit
         preprocess_exe=preprocess
         if test -f "$preprocess_exe"; then
             echo "c $preprocess_exe exists."
             preprocess_path=$(realpath $preprocess_exe)
             echo "preprocess_path = " $preprocess_path >> $CFG_FILE
-        else 
+        else
             echo "Error! could not found $preprocess_exe"
             echo "Error! check preprocess install and follow readme in build_dependencies/preprocess"
             exit
