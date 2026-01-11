@@ -59,8 +59,8 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 				p = 0.99
 			bias += "w %s %s\n" %(yvar,p)
 
-	if args.verbose >= 1:
-        print(" c bias computing:\n", bias)
+	if args.verbose >= 2:
+		print(" c bias computing\n", bias)
 
 	return sampling_cnf + bias
 
