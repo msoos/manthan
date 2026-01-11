@@ -48,7 +48,7 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 		count_zero = count_nonzero(samples_biased_zero[:,yvar-1])
 		q = round(float(count_zero)/500,2)
 
-		print("p,p for var %s : %s -- %s" %(yvar,p, p))
+		print("p,p for var %s : %0.2lf -- %0.2lf" %(yvar,p, p))
 
 		if 0.35 < p < 0.65 and 0.35 < q < 0.65:
 			bias += "w %s %s\n" %(yvar,p)
