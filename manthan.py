@@ -271,11 +271,11 @@ def manthan():
             sampling_weights_y_1 += "w %s 0.9\n" % (yvar)
             sampling_weights_y_0 += "w %s 0.1\n" % (yvar)
 
-        if args.verbose >= 2:
+        if args.verbose >= 1:
             print(" c computing adaptive bias for Y variables")
             print(" c sampling_weights_y_1 %s" %(sampling_weights_y_1))
             print(" c sampling_weights_y_0 %s" %(sampling_weights_y_0))
-            print(" c sampling cnf", sampling_cnf)
+            # print(" c sampling cnf", sampling_cnf)
             print(" c inputfile_name", inputfile_name)
 
 

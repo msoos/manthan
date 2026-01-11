@@ -2,7 +2,7 @@
 
 
 ## Manthan: A Data-Driven Approach for Boolean Functional Synthesis
-Manthan takes in a \varphi(X,Y) formula as input and returns Boolean function F(X) such that \exists Y \varphi(X, Y) = \varphi(X, F(X)). Manthan works at the intersection of machine learning, constrained sampling, and automated reasoning. 
+Manthan takes in a \varphi(X,Y) formula as input and returns Boolean function F(X) such that \exists Y \varphi(X, Y) = \varphi(X, F(X)). Manthan works at the intersection of machine learning, constrained sampling, and automated reasoning.
 
 To read more about Manthan, have a look at [CAV-20 paper](https://priyanka-golia.github.io/publication/cav20-manthan/cav20-manthan.pdf) and [ICCAD-21 paper](https://arxiv.org/pdf/2108.05717.pdf). You can also refer to the related [slides](https://www.cs.toronto.edu/~meel/Slides/manthan.pdf) and the talk [video](https://www.youtube.com/watch?v=dXWWiKfY6cI&t=2s).
 
@@ -47,11 +47,11 @@ sudo python -m pip install -r requirements.txt
 
 
 
-Manthan depends on: 
-1. [UNIQUE](https://github.com/perebor/unique) to extract the unique functions. 
+Manthan depends on:
+1. [UNIQUE](https://github.com/perebor/unique) to extract the unique functions.
 2. [Open-WBO](https://github.com/sat-group/open-wbo) and [RC2](https://pysathq.github.io/docs/html/api/examples/rc2.html)  for MaxSAT queries
-3. [PicoSAT](http://fmv.jku.at/picosat/) to compute unsat core. 
-4. [Scikit-Learn](https://scikit-learn.org/stable/modules/tree.html) to create decision trees to learn candidates.  
+3. [PicoSAT](http://fmv.jku.at/picosat/) to compute unsat core.
+4. [Scikit-Learn](https://scikit-learn.org/stable/modules/tree.html) to create decision trees to learn candidates.
 5. [ABC](https://github.com/berkeley-abc/abc) to represent and manipulate Boolean functions.
 6. [CMSGEN](https://github.com/meelgroup/cmsgen) to sample satisfying assignments.
 
@@ -75,10 +75,10 @@ source manthan-venv/bin/activate
 ```
 Now, use Manthan to generate Skolem functions:
 ```bash
-python manthan.py  <qdimacs input> 
+python manthan.py  <qdimacs input>
 ```
 
-#### A sample invocation 
+#### A sample invocation
 
 Let us consider  `benchmarks/test.qdimacs`:
 
@@ -118,7 +118,7 @@ no more repair needed
 number of repairs needed to converge 0
 ```
 
-Manthan will store Skolem functions in a verilog file `test_skolem.v`. 
+Manthan will store Skolem functions in a verilog file `test_skolem.v`.
 
 ```
 module SkolemFormula (i2, i3, o1, o4);
@@ -142,7 +142,7 @@ In this, `i2` and `i3` represent universally quantified variables `2` and `3`, a
 you can also provide different option to consider for manthan:
 
 ```
-python manthan.py [options]  <inputfile qdimacs> 
+python manthan.py [options]  <inputfile qdimacs>
 ```
 To see detailed list of available option:
 
@@ -152,9 +152,9 @@ python manthan.py --help
 
 
 ## Benchmarks
-Few benchmarks are given in `benchmarks` directory. 
+Few benchmarks are given in `benchmarks` directory.
 
-Full list of benchmarks used for our experiments is available [here](https://zenodo.org/record/3892859#.XuTB2XUzZhE). The dataset includes qdimacs and verilog benchmarks. 
+Full list of benchmarks used for our experiments is available [here](https://zenodo.org/record/3892859#.XuTB2XUzZhE). The dataset includes qdimacs and verilog benchmarks.
 
 ## Issues, questions, bugs, etc.
 Please click on "issues" at the top and [create a new issue](https://github.com/meelgroup/manthan/issues). All issues are responded to promptly.
