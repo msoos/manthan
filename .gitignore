@@ -5,3 +5,4 @@ _skolem*
 *.cnf
 *.aig
 variable_mapping.txt
+manthan_dependencies.cfg
