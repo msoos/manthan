@@ -29,7 +29,6 @@ import os
 
 
 def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_weights_y_0, inputfile_name, SkolemKnown):
-
 	samples_biased_one = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_1, inputfile_name)
 	samples_biased_zero = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_0, inputfile_name)
 
@@ -60,42 +59,32 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 				p = 0.99
 			bias += "w %s %s\n" %(yvar,p)
 
-	if args.verbose >= 2:
-		print(" c bias computing", bias)
+	if args.verbose >= 1:
+        print(" c bias computing:\n", bias)
 
 	return sampling_cnf + bias
 
 def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
-
-
 	tempcnffile = tempfile.gettempdir() + '/' + inputfile_name + "_sample.cnf"
 
-
 	assert(sampling_cnf!="")
-
 	with open (tempcnffile,"w") as f:
 		f.write(sampling_cnf)
 	f.close()
 
-
-
 	tempoutputfile = tempfile.gettempdir() + '/' + inputfile_name + "_.txt"
-
 	cmsgen = config['Dependencies-Path']['cmsgen_path']
-
-
 	cmd =  "%s %s --samplefile %s " %(cmsgen,tempcnffile, tempoutputfile)
 	cmd += "--seed %s --samples %s " %(args.seed, int(num_samples))
 
-
-	if args.verbose >= 2:
+	if args.verbose >= 1:
 		print(" c cmsgen cmd", cmd)
-		print(" c tempcnffile", tempcnffile)
-		print(" c tempoutputfile", tempoutputfile)
-		print(" c sampling cnf", sampling_cnf)
+		# print(" c tempcnffile", tempcnffile)
+		# print(" c tempoutputfile", tempoutputfile)
+		# print(" c sampling cnf", sampling_cnf)
+		cmd += "> /dev/null 2>&1"
 	else:
 		cmd += "> /dev/null 2>&1"
-
 
 	os.system(cmd)
 
