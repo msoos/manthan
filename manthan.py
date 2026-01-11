@@ -218,6 +218,7 @@ def manthan():
     '''
     start_time_datagen = time.time()
 
+    num_samples = None
     if not args.maxsamples:
         if len(Xvar) > 4000:
             num_samples = 1000
@@ -227,6 +228,7 @@ def manthan():
             num_samples = 10000
     else:
         num_samples = args.maxsamples
+    assert num_samples is not None
 
     '''
     We can either choose uniform sampler or weighted sampler.
