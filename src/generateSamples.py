@@ -27,6 +27,7 @@ import numpy as np
 from numpy import count_nonzero
 import os
 import subprocess
+import mytemp
 
 
 def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_weights_y_0, inputfile_name, SkolemKnown):
@@ -69,33 +70,16 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 	return sampling_cnf + bias
 
 
-
-
-
-
 def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
-
-
-	tempcnffile = tempfile.gettempdir() + '/' + inputfile_name + "_sample.cnf"
-
-
-	assert(sampling_cnf!="")
-
+	tempcnffile = mytemp.unique_file(inputfile_name + "_sampling", fname_end=".cnf")
 	with open (tempcnffile,"w") as f:
 		f.write(sampling_cnf)
 	f.close()
 
-
-
-	tempoutputfile = tempfile.gettempdir() + '/' + inputfile_name + "_.txt"
-
+	tempoutputfile = mytemp.unique_file(inputfile_name, ".txt")
 	cmsgen = config['Dependencies-Path']['cmsgen_path']
-
-
 	cmd =  "%s %s --samplefile %s " %(cmsgen,tempcnffile, tempoutputfile)
 	cmd += "--seed %s --samples %s " %(args.seed, int(num_samples))
-
-
 	if args.verbose >= 2:
 		print(" c cmsgen cmd", cmd)
 		print(" c tempcnffile", tempcnffile)
@@ -120,18 +104,13 @@ def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 		print(" c generated samples at %s", tempoutputfile)
 
 	if os.path.exists(tempoutputfile):
-
 		with open(tempoutputfile,"r") as f:
 			content = f.read()
-
 		os.unlink(tempoutputfile)
 		os.unlink(tempcnffile)
-
 	else:
-
 		print(" c some issue while generating samples..please check your sampler")
 		exit()
-
 
 	content = content.replace("SAT\n","").replace("\n"," ").strip(" \n").strip(" ")
 	models = content.split(" ")
