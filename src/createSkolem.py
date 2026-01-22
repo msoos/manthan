@@ -23,6 +23,8 @@ THE SOFTWARE.
 '''
 
 import tempfile
+import sys
+import os
 import os
 import numpy as np
 import subprocess
@@ -71,9 +73,7 @@ def skolemfunction_preprocess(inputfile_name, Xvar,Yvar, PosUnate, NegUnate, Uni
 
 
 def createSkolemfunction(inputfile_name, Xvar,Yvar):
-
 	skolemformula = tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v"
-
 	content = ''
 	declare = "module SkolemFormula ("
 	declare_input = ""
