@@ -219,6 +219,8 @@ def addSkolem(error_content,inputfile_name):
 	f.close()
 
 	errorformula = inputfile_name + "_errorformula.v"
+	if os.path.exists(errorformula):
+		os.unlink(errorformula)
 	with open(errorformula, "w") as f:
 		f.write(error_content + skolemcontent)
 	f.close()
@@ -329,6 +331,7 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 
 	stdout, stderr = proc.communicate()
 	exit_code = proc.returncode  # Get exit code here
+	os.unlink(errorformula)
 	if exit_code != 0:
 		print("Error in running file generation cex")
 		print("exit_code:", exit_code)
