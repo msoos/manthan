@@ -284,8 +284,8 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
         f.write(repaircnf)
     f.close()
 
-    unsatcorefile = tempfile.gettempdir() + '/' + inputfile_name + "_unsatcore.txt"
-    satfile = tempfile.gettempdir() + '/' + inputfile_name + "_sat.txt"
+    unsatcorefile = inputfile_name + "_unsatcore.txt"
+    satfile = inputfile_name + "_sat.txt"
     exists = os.path.isfile(unsatcorefile)
 
     if exists:

@@ -30,7 +30,6 @@ import random
 import argparse
 import copy
 from tabnanny import verbose
-import tempfile
 import numpy as np
 from numpy import count_nonzero
 from sklearn import tree
