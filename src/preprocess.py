@@ -114,8 +114,6 @@ def parse(args):
 
 
 def convertcnf(args, cnffile_name, Yvar = []):
-
-
 	with open(args.input,"r") as f:
 		cnfcontent = f.read()
 	f.close()
