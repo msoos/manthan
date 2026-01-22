@@ -22,18 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import tempfile
 import numpy as np
 from numpy import count_nonzero
 import os
 import subprocess
-import mytemp
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from mytemp import unique_file
 
 
 def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_weights_y_0, inputfile_name, SkolemKnown):
-
-
-
 	samples_biased_one = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_1, inputfile_name)
 	samples_biased_zero = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_0, inputfile_name)
 
@@ -71,12 +69,12 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 
 
 def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
-	tempcnffile = mytemp.unique_file(inputfile_name + "_sampling", fname_end=".cnf")
+	tempcnffile = unique_file(inputfile_name + "_sampling", fname_end=".cnf")
 	with open (tempcnffile,"w") as f:
 		f.write(sampling_cnf)
 	f.close()
 
-	tempoutputfile = mytemp.unique_file(inputfile_name, ".txt")
+	tempoutputfile = unique_file(inputfile_name, ".txt")
 	cmsgen = config['Dependencies-Path']['cmsgen_path']
 	cmd =  "%s %s --samplefile %s " %(cmsgen,tempcnffile, tempoutputfile)
 	cmd += "--seed %s --samples %s " %(args.seed, int(num_samples))
