@@ -30,7 +30,9 @@ import tempfile
 from dependencies.rc2 import RC2Stratified
 from pysat.formula import WCNF
 import networkx as nx
-
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from mytemp import unique_file
 
 def maxsatContent(cnfcontent,n, u):
     lines = cnfcontent.split("\n")
@@ -54,8 +56,6 @@ def maxsatContent(cnfcontent,n, u):
             continue
         maxsatCnf += str(maxsatWt) + " " + line + "\n"
     return maxsatWt, maxsatCnf, cnfcontent
-
-
 
 
 def addXvaluation(cnfcontent, maxsatWt, maxsatcnf, modelx, Xvar):
@@ -278,7 +278,7 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
     repaircnf = repaircnf.replace(str_tmp, "p cnf " + str(numVar) + " " + str(numCls + Count_Yvar  + len(Xvar)))
     repaircnf += repair_Yvar_constraint
 
-    cnffile = tempfile.gettempdir() + '/' + inputfile_name+"_unsat.cnf"
+    cnffile = unique_file(inputfile_name+"_unsat", ".cnf")
 
     with open(cnffile,"w") as f:
         f.write(repaircnf)
@@ -501,7 +501,7 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
 
 
 def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
-    with open(tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v","r") as f:
+    with open(inputfile_name + "_skolem.v","r") as f:
         lines = f.readlines()
     f.close()
 
@@ -529,6 +529,6 @@ def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
             newfunction = "assign w%s = (( %s ) & ~(beta%s_%s) );\n" %(yvar, oldfunctionR, yvar, countRefine)
         skolemcontent = skolemcontent.replace(oldfunction, repairformula + newfunction)
 
-    with open(tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v","w") as f:
+    with open(inputfile_name + "_skolem.v","w") as f:
         f.write(skolemcontent)
     f.close()

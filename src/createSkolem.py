@@ -28,6 +28,8 @@ import os
 import os
 import numpy as np
 import subprocess
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from mytemp import unique_file
 
 def skolemfunction_preprocess(inputfile_name, Xvar,Yvar, PosUnate, NegUnate, UniqueVar = [], UniqueDef = ''):
 
@@ -73,7 +75,7 @@ def skolemfunction_preprocess(inputfile_name, Xvar,Yvar, PosUnate, NegUnate, Uni
 
 
 def createSkolemfunction(inputfile_name, Xvar,Yvar):
-	skolemformula = tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v"
+	skolemformula = inputfile_name + "_skolem.v"
 	content = ''
 	declare = "module SkolemFormula ("
 	declare_input = ""
@@ -211,22 +213,20 @@ def createErrorFormula(Xvar, Yvar,  verilog_formula):
 	return error_content
 
 def addSkolem(error_content,inputfile_name):
-
-	skolemformula = tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v"
+	skolemformula = inputfile_name + "_skolem.v"
 
 	with open(skolemformula, 'r') as f:
 		skolemcontent = f.read()
 	f.close()
 
-	errorformula = tempfile.gettempdir() + '/' + inputfile_name + "_errorformula.v"
-
+	errorformula = inputfile_name + "_errorformula.v"
 	with open(errorformula, "w") as f:
 		f.write(error_content + skolemcontent)
 	f.close()
 
 def createSkolem(candidateSkf, Xvar, Yvar, UniqueVars, UniqueDef, inputfile_name):
 
-	tempOutputFile = tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v"
+	tempOutputFile = inputfile_name + "_skolem.v"
 
 	inputstr = 'module SKOLEMFORMULA ('
 	declarestr = ''
@@ -290,7 +290,7 @@ def createSkolem(candidateSkf, Xvar, Yvar, UniqueVars, UniqueDef, inputfile_name
 
 
 def simply(inputfile_name):
-	skolemformula = tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v"  # F(X,Y')
+	skolemformula = inputfile_name + "_skolem.v"  # F(X,Y')
 
 	with open(skolemformula,"r") as f:
 		lines = f.readlines()
@@ -314,16 +314,14 @@ def simply(inputfile_name):
 
 
 def verify(args, config, Xvar, Yvar, inputfile_name):
-	errorformula = tempfile.gettempdir() + '/' + inputfile_name + "_errorformula.v"
-	cexfile = tempfile.gettempdir() + '/' + inputfile_name + "_cex.txt"
+	errorformula = inputfile_name + "_errorformula.v"
+	cexfile = unique_file(inputfile_name + "_cex", ".txt")
 	exists = os.path.isfile("strash.txt")
 	if exists:
 		os.unlink("strash.txt")
 
 	file_generation_cex = config['Dependencies-Path']['file_generation_cex_path']
-
 	cmd = "%s %s %s" % (file_generation_cex, errorformula, cexfile)
-
 	if args.verbose >= 2:
 		print("c file generation cex --verify cmd", cmd)
 
@@ -344,12 +342,13 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 	exists = os.path.isfile("strash.txt")
 	if exists:
 		os.unlink("strash.txt")
-		exists_cex = os.path.isfile(cexfile)
-		if exists_cex:
+		if os.path.getsize(cexfile) != 0:
 			cexmodels = []
 			ret = 1
 			with open(cexfile, 'r') as f:
 				lines = f.readlines()
+			if args.verbose >= 2:
+				print("c Counter example found, lines:", lines)
 			f.close()
 			os.unlink(cexfile)
 			for line in lines:
