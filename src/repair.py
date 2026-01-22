@@ -293,9 +293,8 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
 
     ret, clistx, clisty = findUNSATCorePicosat(args, config, cnffile, unsatcorefile, satfile, Xvar,Yvar)
 
-
-
     if ret:
+        os.unlink(satfile)
         return (ret, [], clistx, clisty)
     else:
         cmsgen = config['Dependencies-Path']['cmsgen_path']
