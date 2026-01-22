@@ -285,11 +285,11 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
     f.close()
 
     unsatcorefile = inputfile_name + "_unsatcore.txt"
-    satfile = inputfile_name + "_sat.txt"
-    exists = os.path.isfile(unsatcorefile)
-
-    if exists:
+    if os.path.isfile(unsatcorefile):
         os.remove(unsatcorefile)
+    satfile = inputfile_name + "_sat.txt"
+    if os.path.isfile(satfile):
+        os.remove(satfile)
 
     ret, clistx, clisty = findUNSATCorePicosat(args, config, cnffile, unsatcorefile, satfile, Xvar,Yvar)
 
