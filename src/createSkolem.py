@@ -332,13 +332,12 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 				stderr=subprocess.PIPE,
 				text=True)
 
-	_, stderr = proc.communicate()
-	if stderr != '':
-		print("Error in running file generation cex:", stderr)
-		exit(1)
+	stdout, stderr = proc.communicate()
 	exit_code = proc.returncode  # Get exit code here
 	if exit_code != 0:
-		exit("Error in running file generation cex")
+		print("Error in running file generation cex: %s" % stderr)
+		print("Error in running file generation cex: %s" % stdout)
+		exit(1)
 
 	exists = os.path.isfile("strash.txt")
 	if exists:
