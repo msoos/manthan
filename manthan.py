@@ -475,6 +475,7 @@ def manthan():
     if args.logtime:
         logtime(inputfile_name, "repair time:"+str(end_time-start_time_repair))
         logtime(inputfile_name, "totaltime:"+str(end_time-start_time))
+    os.unlink(cnffile_name)
 
 
 if __name__ == "__main__":

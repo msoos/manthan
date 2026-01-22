@@ -311,8 +311,6 @@ def simply(inputfile_name):
 	f.close()
 
 
-
-
 def verify(args, config, Xvar, Yvar, inputfile_name):
 	errorformula = inputfile_name + "_errorformula.v"
 	cexfile = unique_file(inputfile_name + "_cex", ".txt")
@@ -351,8 +349,10 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 				print("c Counter example found, lines:", lines)
 			f.close()
 			os.unlink(cexfile)
+			model = None
 			for line in lines:
 				model = line.strip(" \n")
+			assert (model is not None)
 			cex = list(map(int, model))
 			templist = np.split(cex, [len(Xvar), len(Xvar) + len(Yvar)])
 			modelx = templist[0]
@@ -366,6 +366,8 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 			cexmodels.append(modelyp)
 			return(1, cexmodels, ret)
 		else:
+			os.unlink(cexfile)
 			return(1, [], 0)
 	else:
+		os.unlink(cexfile)
 		return(0, [0], 1)
