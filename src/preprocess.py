@@ -23,9 +23,6 @@ THE SOFTWARE.
 '''
 
 
-
-
-import tempfile
 from subprocess import Popen, PIPE, check_output
 import signal
 import os
@@ -41,10 +38,10 @@ def parse(args):
 	Xvar is universally quantified variables
 	Yvar is existentially quantified variables
 
-	For DQBF 
+	For DQBF
 	H{} presents Henkin Dependencies
 	H[y_i] = [x_1, \ldots,x_a] where x_1,\ldots x_a \subseteq X
-	
+
 	'''
 
 	Xvar = []
@@ -57,15 +54,15 @@ def parse(args):
 			continue
 		if (line == "") or (line == "\n"):
 			continue
-		
+
 		if line.startswith("p"):
 			continue
-		
+
 		if line.startswith("a"):
 			Xvar += line.strip("a").strip("\n").strip(" ").split(" ")[:-1]
-			
+
 			continue
-		
+
 		if line.startswith("e"):
 			Yvar += line.strip("e").strip("\n").strip(" ").split(" ")[:-1]
 			continue
@@ -86,12 +83,12 @@ def parse(args):
 	if (len(Xvar) == 0) or (len(Yvar) == 0) or (len(qdimacs_list) == 0):
 		print(" c problem with the files, can not synthesis Skolem functions")
 		exit()
-	
-	
-	
+
+
+
 	Yvar = list(map(int, list(Yvar)))
 	Xvar = list(map(int, list(Xvar)))
-	
+
 	dg = nx.DiGraph()  # dag to handle dependencies
 
 	for yvar in Yvar:
@@ -106,12 +103,12 @@ def parse(args):
 					HenkinDep[yvar_j] = Xvar
 
 				if (yvar_i != yvar_j) and (set(HenkinDep[yvar_j]).issubset(set(HenkinDep[yvar_i]))):
-					
+
 					if not dg.has_edge(yvar_j,yvar_i):
 						dg.add_edge(yvar_i, yvar_j)
-		
+
 		return Xvar, Yvar, HenkinDep, qdimacs_list, dg
-	
+
 	else:
 		return Xvar, Yvar, qdimacs_list, dg
 
@@ -134,7 +131,7 @@ def convertcnf(args, cnffile_name, Yvar = []):
 		cnfcontent = cnfcontent.replace("e ", "c e")
 		cnfcontent = cnfcontent.replace("d ", "c d")
 		cnfcontent = cnfcontent.replace("c ret", dvar_str+"c ret")
-		
+
 
 	else:
 
@@ -150,7 +147,7 @@ def convertcnf(args, cnffile_name, Yvar = []):
 def preprocess(cnffile_name,args,config):
 
 	'''
-	Preprocess calls Cryptominisat Based framework to find 
+	Preprocess calls Cryptominisat Based framework to find
 	positive and negative unates.
 	'''
 	preprocess = config['Dependencies-Path']['preprocess_path']
@@ -158,7 +155,7 @@ def preprocess(cnffile_name,args,config):
 
 	if args.verbose >= 2:
 		print("c preprocess cmd", cmd)
-		
+
 	with Popen(cmd, shell=True, stdout=PIPE, preexec_fn=os.setsid) as process:
 		try:
 			output = process.communicate(timeout=500)[0]
@@ -193,7 +190,4 @@ def preprocess(cnffile_name,args,config):
 				print(" c preprocessing error .. contining ")
 				exit()
 			return PosUnate, NegUnate
-
-
-
 
