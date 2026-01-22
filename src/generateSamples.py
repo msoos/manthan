@@ -26,12 +26,13 @@ import tempfile
 import numpy as np
 from numpy import count_nonzero
 import os
+import subprocess
 
 
 def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_weights_y_0, inputfile_name, SkolemKnown):
 
-	
-	
+
+
 	samples_biased_one = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_1, inputfile_name)
 	samples_biased_zero = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_0, inputfile_name)
 
@@ -61,12 +62,12 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 			if float(p) == 1.0:
 				p = 0.99
 			bias += "w %s %s\n" %(yvar,p)
-	
+
 	if args.verbose >= 2:
 		print(" c bias computing", bias)
-	
+
 	return sampling_cnf + bias
-		
+
 
 
 
@@ -74,7 +75,7 @@ def computeBias(args, config, Yvar,sampling_cnf, sampling_weights_y_1, sampling_
 
 def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 
-	
+
 	tempcnffile = tempfile.gettempdir() + '/' + inputfile_name + "_sample.cnf"
 
 
@@ -93,18 +94,27 @@ def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 
 	cmd =  "%s %s --samplefile %s " %(cmsgen,tempcnffile, tempoutputfile)
 	cmd += "--seed %s --samples %s " %(args.seed, int(num_samples))
-	
+
 
 	if args.verbose >= 2:
 		print(" c cmsgen cmd", cmd)
 		print(" c tempcnffile", tempcnffile)
 		print(" c tempoutputfile", tempoutputfile)
 		print(" c sampling cnf", sampling_cnf)
-	else:
-		cmd += "> /dev/null 2>&1"
-	
-	
-	os.system(cmd)
+
+	proc = subprocess.Popen(cmd.split(),
+				stdout=subprocess.PIPE,
+				stderr=subprocess.PIPE,
+				text=True)
+	stdout, stderr = proc.communicate()
+	print(stderr, end='')
+	exit_code = proc.returncode
+	if exit_code != 10 and exit_code != 20:
+		print("exit code:", exit_code)
+		print("Error running cmsgen")
+		print("stdout:", stdout)
+		print("stderr:", stderr)
+		exit(1)
 
 	if args.verbose >= 2:
 		print(" c generated samples at %s", tempoutputfile)
@@ -122,14 +132,14 @@ def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 		print(" c some issue while generating samples..please check your sampler")
 		exit()
 
-	
+
 	content = content.replace("SAT\n","").replace("\n"," ").strip(" \n").strip(" ")
 	models = content.split(" ")
 	models = np.array(models)
 
 	if args.verbose >= 2:
 		print(" c models", models)
-	
+
 	if models[len(models)-1] != "0":
 		models = np.delete(models, len(models) - 1, axis=0)
 
@@ -142,12 +152,12 @@ def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 		print("c check for np.where", np.where(models == "0"))
 
 
-	
+
 	if len(np.where(models == "0")[0]) > 0:
 
 		if args.verbose >= 2:
 			print("c was able to go inside where condition")
-		
+
 		index = np.where(models == "0")[0][0]
 		var_model = np.reshape(models, (-1, index+1)).astype(np.int_)
 
@@ -157,8 +167,8 @@ def generatesample(args, config, num_samples, sampling_cnf, inputfile_name):
 		var_model = var_model > 0
 		var_model = np.delete(var_model, index, axis=1)
 		var_model = var_model.astype(np.int_)
-	
+
 		if args.verbose >= 2:
 			print("c var_models first row", var_model[0])
-	
+
 	return var_model

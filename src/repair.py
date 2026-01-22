@@ -25,6 +25,7 @@ THE SOFTWARE.
 from enum import unique
 import numpy as np
 import os
+import subprocess
 import tempfile
 from dependencies.rc2 import RC2Stratified
 from pysat.formula import WCNF
@@ -88,9 +89,9 @@ def callRC2(maxsatcnf, modelyp, UniqueVars, Unates, Yvar, YvarOrder):
             wcnf.append([-1*yvar], weight = weight)
         else:
             wcnf.append([yvar], weight = weight)
-        
+
         wt_softclause += 1
-    
+
     wcnf.topw = wt_softclause
 
     rc2 = RC2Stratified(wcnf)
@@ -103,7 +104,7 @@ def callRC2(maxsatcnf, modelyp, UniqueVars, Unates, Yvar, YvarOrder):
                 indlist.append(abs(var))
             if (int(var) > 0) and (modelyp[index] == 0):
                 indlist.append(abs(var))
-    
+
     indlist = np.array(indlist)
     indlist = np.unique(indlist)
 
@@ -131,12 +132,12 @@ def callMaxsat(args, config, maxsatcnf, modelyp, SkolemKnown, Yvar, YvarOrder, i
 
     itr = 0
     for var in Yvar:
-        
+
 
         if var not in SkolemKnown:
-        
+
             weight = 1
-            
+
             if modelyp[itr] == 0:
                 maxsatcnf += "%s -%s 0\n" %(weight, var )
             else:
@@ -154,15 +155,31 @@ def callMaxsat(args, config, maxsatcnf, modelyp, SkolemKnown, Yvar, YvarOrder, i
     openwbo = config["Dependencies-Path"]["openwbo_path"]
 
     cmd = "%s %s -print-unsat-soft=%s " % (openwbo, maxsatformula, outputfile)
-    
+
     if args.verbose >=2 :
         print("open-wbo commond", cmd)
-    else:
-        cmd += "> /dev/null 2>&1"
-    
-    os.system(cmd)
 
-    
+    proc = subprocess.Popen(cmd.split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True)
+    stdout, stderr = proc.communicate()
+    print(stderr, end='')
+    exit_code = proc.returncode
+
+  # _SATISFIABLE_ = 10,
+  # _UNSATISFIABLE_ = 20,
+  # _OPTIMUM_ = 30,
+  # _UNKNOWN_ = 40,
+  # _ERROR_ = 50
+    if exit_code == 50 or (exit_code != 30 and exit_code != 10 and exit_code != 20):
+        print("Error running open-wbo")
+        print("exit code:", exit_code)
+        print("stdout:", stdout)
+        print("stderr:", stderr)
+        exit(1)
+
+
 
     with open(outputfile, 'r') as f:
         lines = f.readlines()
@@ -189,7 +206,7 @@ def callMaxsat(args, config, maxsatcnf, modelyp, SkolemKnown, Yvar, YvarOrder, i
 
     indlist = []
     YvarOrder_ind.sort(reverse=True)
-    
+
     for i in YvarOrder_ind:
         indlist.append(YvarOrder[i])
     indlist = np.array(indlist)
@@ -199,12 +216,26 @@ def callMaxsat(args, config, maxsatcnf, modelyp, SkolemKnown, Yvar, YvarOrder, i
 def findUNSATCorePicosat(args, config, cnffile,unsatcorefile, satfile, Xvar,Yvar):
 
     picosat = config['Dependencies-Path']['picosat_path']
-    cmd = "%s -s %s -V %s %s > %s " %(picosat, args.seed, unsatcorefile, cnffile, satfile)
+    cmd = "%s -s %s -V %s %s" %(picosat, args.seed, unsatcorefile, cnffile)
 
     if args.verbose >= 2:
         print("picosat cmd", cmd)
 
-    os.system(cmd)
+    proc = subprocess.Popen(cmd.split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True)
+    stdout, stderr = proc.communicate()
+    print(stderr, end='')
+    exit_code = proc.returncode
+    if exit_code != 10 and exit_code != 20:
+        print("Error running picosat")
+        print("exit code:", exit_code)
+        print("stdout:", stdout)
+        print("stderr:", stderr)
+        exit(1)
+    with open(satfile, "w") as f:
+        f.write(stdout)
     exists = os.path.isfile(unsatcorefile)
     if exists:
         with open(unsatcorefile,"r") as f:
@@ -229,7 +260,7 @@ def findUNSATCorePicosat(args, config, cnffile,unsatcorefile, satfile, Xvar,Yvar
     else:
         if args.verbose >= 2:
             print("picosat returns sat for", cnffile)
-            
+
         os.unlink(satfile)
         return 0, [], []
 
@@ -259,22 +290,34 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
 
     if exists:
         os.remove(unsatcorefile)
-        
+
     ret, clistx, clisty = findUNSATCorePicosat(args, config, cnffile, unsatcorefile, satfile, Xvar,Yvar)
 
-    
+
 
     if ret:
         return (ret, [], clistx, clisty)
     else:
         cmsgen = config['Dependencies-Path']['cmsgen_path']
-        cmd = "%s --seed %s --samples %s %s --samplefile %s > /dev/null 2>&1" % (cmsgen, args.seed, 1, cnffile,satfile)
-        
+        cmd = "%s --seed %s --samples %s %s --samplefile %s" % (cmsgen, args.seed, 1, cnffile, satfile)
+
         if args.verbose >= 2:
             print("c picosat return SAT, to find satisfying assignment", cmd)
-        
-        os.system(cmd)
-        
+
+        proc = subprocess.Popen(cmd.split(),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True)
+        stdout, stderr = proc.communicate()
+        print(stderr, end='')
+        exit_code = proc.returncode
+        if exit_code != 20 and exit_code != 10:
+            print("Error running cmsgen")
+            print("exit code:", exit_code)
+            print("stdout:", stdout)
+            print("stderr:", stderr)
+            exit(1)
+
         with open(satfile,"r") as f:
             lines = f.readlines()
         f.close()
@@ -299,7 +342,7 @@ def findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, Xvar, Yvar, C
                 model.append(0)
         os.unlink(cnffile)
         os.unlink(satfile)
-        return ret, model, [], []   
+        return ret, model, [], []
 
 def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown, sigma, inputfile_name, HenkinDep = {}):
 
@@ -318,7 +361,7 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
 
         repairvar = ind[itr]
         itr += 1
-        
+
         if (repairvar in SkolemKnown) or (repairvar in satvar):
             continue
 
@@ -327,27 +370,27 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
         count_Yvar = 0  # it counts the number of times (Y <-> \sigma[Y']) is added part wrong unique variables
         allowed_Y = []  # list of all y_j variables on which y_i (repairvar) could be depended.
 
-        if not args.henkin: 
+        if not args.henkin:
 
             '''
             YvarOrder: Y_{i+1} to |Y| on which y_i could be depended.
             '''
-            
+
             repairvar_index = np.where(YvarOrder == repairvar)[0][0]
-            
+
             for yj_index in range(repairvar_index,len(Yvar)):
                 yj_var = YvarOrder[yj_index]
                 allowed_Y.append(yj_var)
-        
+
         if args.henkin:
 
             allowed_Y = list(nx.descendants(dg,repairvar))
-        
-        
+
+
         for yj_var in allowed_Y:
 
             yj_index = np.where(np.array(Yvar) == yj_var)[0][0]
-            
+
             if yj_var in SkolemKnown:
                 continue
 
@@ -361,39 +404,39 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
                     repair_Yvar_constraint += "-%s 0\n" %(yj_var)
                 else:
                     repair_Yvar_constraint += "%s 0\n" %(yj_var)
-            count_Yvar += 1  
-        
+            count_Yvar += 1
+
         if args.verbose > 1:
             print(" c repairing %s" %(repairvar))
-        
+
         if not args.henkin:
-            ret, model, clistx, clisty = findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, 
+            ret, model, clistx, clisty = findUnsatCore(args, config, repair_Yvar_constraint, repaircnf,
                                                             Xvar, Yvar, count_Yvar, inputfile_name)
         else:
-            ret, model, clistx, clisty = findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, HenkinDep[repairvar], 
+            ret, model, clistx, clisty = findUnsatCore(args, config, repair_Yvar_constraint, repaircnf, HenkinDep[repairvar],
                                                             Yvar, count_Yvar, inputfile_name)
 
         if ret == 0:
             '''
             G_k is SAT, find another set of candidates to repair
             '''
-            
+
             satvar.append(repairvar)
 
             if (repairvar not in ind_org) and (len(repaired) > 0):
                 continue
-            
+
             if len(ind) > (len(ind_org) * 50) and args.lexmaxsat:
                 print(" c too many new repair candidate added.. calling rc2")
                 return 1, repairfunctions
-            
-            
-            
+
+
+
             model = np.array(model)
             diff = np.bitwise_xor(modelyp, model)
             index = np.where(diff == 1)[0]
-            
-            
+
+
             for yk in index:
 
                 l = itr
@@ -411,7 +454,7 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
                             break
                         l = l + 1
                     if flag == 0:
-                        ind = np.append(ind, Yvar[yk]).astype(np.int_)   
+                        ind = np.append(ind, Yvar[yk]).astype(np.int_)
         else:
 
             '''
@@ -422,7 +465,7 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
 
             if args.verbose > 1:
                 print(" c gk formula is UNSAT\ncreating beta formula")
-            
+
             betaformula = ''
             for x in clistx:
                 x_index = np.where(np.array(Xvar) == x)[0][0]
@@ -431,7 +474,7 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
                     betaformula += "~i%s & " %(x)
                 else:
                     betaformula += "i%s & " %(x)
-                
+
             for y in clisty:
                 y_index = np.where(np.array(Yvar) == y)[0][0]
 
@@ -445,12 +488,12 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
 
                 if y == repairvar:
                     continue
-        
+
                 if modelyp[y_index] == 0:
                     betaformula += "~o%s & " %(y)
                 else:
                     betaformula += "o%s & " %(y)
-            
+
             repairfunctions[repairvar] = betaformula.strip("& ")
             assert(repairfunctions[repairvar] != "")
     if args.verbose == 2:
@@ -458,27 +501,27 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
     return 0, repairfunctions
 
 def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
-    
+
     with open(tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v","r") as f:
         lines = f.readlines()
     f.close()
-    
+
     skolemcontent = "".join(lines)
-    
+
     for yvar in list(repairfunctions.keys()):
         oldfunction = [line for line in lines if "assign w" + str(yvar)+" " in line][0]
         oldfunctionR = oldfunction.rstrip(";\n").lstrip("assign w%s = " %(yvar))
         repairformula = "wire beta%s_%s;\nassign beta%s_%s = ( %s );\n" %(yvar,countRefine,yvar,countRefine,repairfunctions[yvar])
-        
+
         yindex = np.where(np.array(Yvar) == yvar)[0][0]
 
         '''
         if repair is to move from 0 to 1
             F(X) = F(X) \lor repair
-        
+
         if repair is to move from 1 to 0
             F(X) = F(X) \land \lnot repair
-        
+
         '''
 
         if modelyp[yindex] == 0:
@@ -486,7 +529,7 @@ def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
         else:
             newfunction = "assign w%s = (( %s ) & ~(beta%s_%s) );\n" %(yvar, oldfunctionR, yvar, countRefine)
         skolemcontent = skolemcontent.replace(oldfunction, repairformula + newfunction)
-    
+
     with open(tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v","w") as f:
         f.write(skolemcontent)
     f.close()

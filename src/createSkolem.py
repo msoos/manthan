@@ -318,7 +318,7 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 	cexfile = tempfile.gettempdir() + '/' + inputfile_name + "_cex.txt"
 	exists = os.path.isfile("strash.txt")
 	if exists:
-		os.system("rm strash.txt")
+		os.unlink("strash.txt")
 
 	file_generation_cex = config['Dependencies-Path']['file_generation_cex_path']
 
@@ -335,13 +335,15 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 	stdout, stderr = proc.communicate()
 	exit_code = proc.returncode  # Get exit code here
 	if exit_code != 0:
-		print("Error in running file generation cex: %s" % stderr)
-		print("Error in running file generation cex: %s" % stdout)
+		print("Error in running file generation cex")
+		print("exit_code:", exit_code)
+		print("stderr:" , stderr)
+		print("stdout:", stdout)
 		exit(1)
 
 	exists = os.path.isfile("strash.txt")
 	if exists:
-		os.system("rm strash.txt")
+		os.unlink("strash.txt")
 		exists_cex = os.path.isfile(cexfile)
 		if exists_cex:
 			cexmodels = []
