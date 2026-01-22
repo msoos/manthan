@@ -499,8 +499,8 @@ def repair(args, config, repaircnf, ind, Xvar, Yvar, YvarOrder, dg, SkolemKnown,
         print(" c repaired functions", repairfunctions)
     return 0, repairfunctions
 
-def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
 
+def updateSkolem(repairfunctions, countRefine, modelyp, inputfile_name, Yvar):
     with open(tempfile.gettempdir() + '/' + inputfile_name + "_skolem.v","r") as f:
         lines = f.readlines()
     f.close()
