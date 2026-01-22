@@ -29,7 +29,7 @@ import stat
 def unique_file(fname_begin, fname_end=".cnf", max_num_files=2700):
     counter = 1
     while True:
-        fname = "out/" + fname_begin + '_' + str(counter) + fname_end
+        fname = fname_begin + '_' + str(counter) + fname_end
         try:
             fd = os.open(
                 fname, os.O_CREAT | os.O_EXCL, stat.S_IREAD | stat.S_IWRITE)
