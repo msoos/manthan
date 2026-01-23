@@ -4,3 +4,6 @@ src/__pycache__/
 *.qdimacs
 samples.out
 variable_mapping.txt
+*.txt
+manthan_dependencies.cfg
+*.cnf
