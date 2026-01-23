@@ -199,7 +199,7 @@ if [ "$all" = "yes" ]; then
 		rm -rf .cache
 		rm -rf build
     else
-		patch -p1 < ../../louvain_fix.patch
+		patch -p1 < ../../louvain_fix.diff
 		mkdir build
 		cd build || exit
 		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to louvain-community succeeded" || exit
