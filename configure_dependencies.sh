@@ -88,7 +88,7 @@ if [ "$all" = "yes" ]; then
     else
         CFLAGS='-fPIC' make -j14 libabc.so && echo "c make to ABC succeeded" || exit
         gcc -Wall -g -c file_generation_cex.c -o file_generation_cex.o  && echo "c file_generation_cex complied" || exit
-        g++ -g -o file_generation_cex file_generation_cex.o libabc.so -lm -ldl -lreadline -lpthread && echo "c file_generation_cex linked" || exit
+        g++ -g -o file_generation_cex file_generation_cex.o ./libabc.so -lm -ldl -lreadline -lpthread && echo "c file_generation_cex linked" || exit
 		ln -s "dependencies/abc/libabc.so" ../../libabc.so
         file_generation_cex=file_generation_cex
         ln -s libabc.so ../../
