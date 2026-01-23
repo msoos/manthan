@@ -143,7 +143,7 @@ if [ "$all" = "yes" ]; then
 		rm -rf .cache
 		rm -f open-wbo_static
 	else
-		make -j14 rs && echo "c make to open wbo succeeded" || exit
+		make -j14 r && echo "c make to open wbo succeeded" || exit
 		wbo=open-wbo
 		if test -f "$wbo"; then
 			echo "c $wbo exists."
