@@ -1,3 +1,6 @@
+#!/bin/bash
+ONLY_CLEAN="no"
+
 pararser() {
     CurrDir=$(realpath dependencies)
     # Define default values
