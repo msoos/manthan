@@ -333,7 +333,7 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 	exit_code = proc.returncode  # Get exit code here
 	os.unlink(errorformula)
 	if exit_code != 0:
-		print("Error in running file generation cex")
+		print("Error running file generation cex")
 		print("exit_code:", exit_code)
 		print("stderr:" , stderr)
 		print("stdout:", stdout)
