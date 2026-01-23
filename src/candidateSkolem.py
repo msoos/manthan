@@ -22,6 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import os
+# Set these BEFORE importing numpy, sklearn, or any scientific computing libraries
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
 import numpy as np
 from sklearn import tree
 import pydotplus
@@ -32,7 +37,7 @@ import collections
 import copy
 
 
-def treepaths(root, is_leaves, children_left, children_right, data_feature_names, 
+def treepaths(root, is_leaves, children_left, children_right, data_feature_names,
                 feature, values, dependson, leave_label, Xvar, Yvar, index, size,args):
     if (is_leaves[root]):
         if not args.multiclass:
@@ -55,7 +60,7 @@ def treepaths(root, is_leaves, children_left, children_right, data_feature_names
                 return (["1"],dependson)
             else:
                 return(["val=0"],dependson)
-    	
+
 
 
     left_subtree, dependson = treepaths(
@@ -76,7 +81,7 @@ def treepaths(root, is_leaves, children_left, children_right, data_feature_names
                 list_left.append("~w" + str(data_feature_names[feature[root]]) + ' & ' + leaf)
             else:
                 list_left.append("~i" + str(data_feature_names[feature[root]]) + ' & ' + leaf)
-           
+
     list_right = []
     for leaf in right_subtree:
         if leaf != "val=0":
@@ -133,15 +138,15 @@ def createDecisionTree(featname, featuredata, labeldata, yvar, args, Xvar, Yvar)
         else:
             is_leaves[node_id] = True
             leave_label[node_id]=clf.classes_[np.argmax(clf.tree_.value[node_id])]
-    
+
     D_dict = {}
     psi_dict = {}
 
     for i in range(len(yvar)):
         D = []
         paths, D = treepaths( 0, is_leaves, children_left, children_right, featname, feature, values, D, leave_label, Xvar, Yvar, i, len(yvar),args)
-    
-       
+
+
 
         psi_i = ''
 
@@ -149,22 +154,22 @@ def createDecisionTree(featname, featuredata, labeldata, yvar, args, Xvar, Yvar)
             if "val=0" in paths:
                 paths = ["0"]
             else:
-                paths = ["1"]  
-               
+                paths = ["1"]
+
         if len(paths) == 0:
             paths.append("0")
             D = []
 
         for path in paths:
-        
-            psi_i += "( "+ path + " ) | " 
-        
-        
+
+            psi_i += "( "+ path + " ) | "
+
+
         D_dict[yvar[i]] = D
         psi_dict[yvar[i]] = psi_i.strip("| ")
-    
+
     return psi_dict, D_dict
-         
+
 
 def binary_to_int(lst):
 
@@ -182,12 +187,12 @@ def createCluster(args, Yvar, SkolemKnown, ng):
     disjointSet = []
     clusterY = []
 
-    
+
     for var in Yvar:
 
         if var in SkolemKnown:
             continue
-        
+
         if (args. multiclass) and not (args.henkin):
 
             if var in list(ng.nodes):
@@ -204,10 +209,10 @@ def createCluster(args, Yvar, SkolemKnown, ng):
                     else:
                         hop_neighbour = []
                     hoppingDistance -= 1
-                
+
                 if len(hop_neighbour) == 0:
                     hop_neighbour = [var]
-                
+
                 for var2 in hop_neighbour:
 
                     ng.remove_node(var2)
@@ -220,14 +225,14 @@ def createCluster(args, Yvar, SkolemKnown, ng):
                     disjointSet.append([var])
         else:
             disjointSet.append([var])
-    
+
     return disjointSet
 
 def learnCandidate(Xvar, Yvar, UniqueVars, PosUnate, NegUnate, samples, dg, ng, args, HenkinDep = {}):
-    
+
     candidateSkf = {}  # represents y_i and its corresponding learned candidate via decision tree.
 
-    
+
 
     SkolemKnown = PosUnate + NegUnate + UniqueVars
 
@@ -235,16 +240,16 @@ def learnCandidate(Xvar, Yvar, UniqueVars, PosUnate, NegUnate, samples, dg, ng, 
 
         if (args.multiclass) and (var in list(ng.nodes)):
             ng.remove_node(var)
-        
+
         for var in PosUnate:
             candidateSkf[var] = " 1 "
-        
+
         for var in NegUnate:
             candidateSkf[var] = " 0 "
-        
+
 
     disjointSet = createCluster(args, Yvar, SkolemKnown, ng)
-    
+
     for Yset in disjointSet:
         dependent = []
         for yvar in Yset:
@@ -268,7 +273,7 @@ def learnCandidate(Xvar, Yvar, UniqueVars, PosUnate, NegUnate, samples, dg, ng, 
             Yfeatname = yvar_depends_on
             featname = HenkinDep[Yset[0]]
             samples_X = samples[:, (np.array(HenkinDep[Yset[0]])-1)]
-            
+
 
         if len(Yfeatname) > 0:
 
@@ -304,4 +309,4 @@ def learnCandidate(Xvar, Yvar, UniqueVars, PosUnate, NegUnate, samples, dg, ng, 
     if args.verbose == 2:
         print(" c candidate functions are", candidateSkf)
 
-    return candidateSkf, dg    
+    return candidateSkf, dg

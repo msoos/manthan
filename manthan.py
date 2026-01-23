@@ -30,6 +30,10 @@ import random
 import argparse
 import copy
 from tabnanny import verbose
+# Set these BEFORE importing numpy, sklearn, or any scientific computing libraries
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
 import numpy as np
 from numpy import count_nonzero
 from sklearn import tree
