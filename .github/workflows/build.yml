@@ -32,6 +32,18 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -yq help2man libgmp-dev libmpfr-dev libboost-all-dev cmake build-essential libboost-program-options-dev libreadline-dev libgmp-dev python3-venv
 
+    - name: Install ccache
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ccache
+
+    - name: Configure ccache
+      run: |
+        echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+        echo "/usr/lib/ccache" >> $GITHUB_PATH
+        ccache --max-size=2G
+        ccache --show-stats
+
     - name: Checkout code
       uses: actions/checkout@v3
       with:
