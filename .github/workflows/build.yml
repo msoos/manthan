@@ -57,4 +57,4 @@ jobs:
         ./configure_dependencies.sh --all
         python3 -m pip install -r requirements.txt
         ./configure_dependencies.sh --all
-        ./manthan.py ../benchmarks/factorization8.qdimacs
+        ./manthan.py benchmarks/factorization8.qdimacs
