@@ -1,0 +1,14 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 512
+ c count Y (existentially quantified variables) variables 2126
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 127
+ c finding uniquely defined functions
+ c count of uniquely defined variables 1996
+ c all Y variables are either unate or unique
+ c found functions for all Y variables
+ c Total time taken 43.195735931396484
+Skolem functions are stored at ceiling256_skolem.v

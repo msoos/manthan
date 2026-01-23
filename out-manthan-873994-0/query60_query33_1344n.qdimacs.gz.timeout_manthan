@@ -1,0 +1,24 @@
+Command terminated by signal 14
+	Command being timed: "./doalarm -t real 3600 ././manthan.py --verb 1 query60_query33_1344n.qdimacs"
+	User time (seconds): 3180.62
+	System time (seconds): 116.75
+	Percent of CPU this job got: 91%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:00:00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3087540
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 767
+	Minor (reclaiming a frame) page faults: 17048109
+	Voluntary context switches: 849469
+	Involuntary context switches: 3335669
+	Swaps: 0
+	File system inputs: 9233096
+	File system outputs: 9976072
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

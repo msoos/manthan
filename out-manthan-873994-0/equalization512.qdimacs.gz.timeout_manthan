@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "./doalarm -t real 3600 ././manthan.py --verb 1 equalization512.qdimacs"
+	User time (seconds): 2101.06
+	System time (seconds): 62.55
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 36:22.31
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 9675664
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 598
+	Minor (reclaiming a frame) page faults: 2362602
+	Voluntary context switches: 30963
+	Involuntary context switches: 36727
+	Swaps: 0
+	File system inputs: 862896
+	File system outputs: 857280
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

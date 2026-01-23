@@ -1,0 +1,19 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 4273
+ c count Y (existentially quantified variables) variables 7734
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 6
+ c finding uniquely defined functions
+ c count of uniquely defined variables 7693
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+Error in running file generation cex
+exit_code: -6
+stderr: file_generation_cex: src/base/abc/abcFanio.c:92: Abc_ObjAddFanin: Assertion `!Abc_ObjIsNet(pObj) || !Abc_ObjFaninNum(pObj)' failed.
+
+stdout: Executing: read 'neclaftp2002_errorformula.v'
+

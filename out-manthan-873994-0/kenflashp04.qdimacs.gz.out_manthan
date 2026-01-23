@@ -1,0 +1,24 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 65
+ c count Y (existentially quantified variables) variables 278
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 2
+ c finding uniquely defined functions
+ c count of uniquely defined variables 210
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+Error in running file generation cex
+exit_code: 1
+stderr: 
+stdout: Executing: read 'kenflashp04_errorformula.v'
+Ver_StreamGetWord(): The buffer size is exceeded.
+kenflashp04_errorformula.v (line 20931): Cannot read the equation for w225.
+Reading network from file has failed.
+Executing: strash
+Error: Empty network.
+Cannot execute command "strash".
+

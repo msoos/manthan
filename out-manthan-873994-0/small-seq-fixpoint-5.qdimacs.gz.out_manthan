@@ -1,0 +1,25 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 1212
+ c count Y (existentially quantified variables) variables 13835
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 9
+ c count of negative unates 1
+ c finding uniquely defined functions
+ c count of uniquely defined variables 12806
+ c generating samples
+Traceback (most recent call last):
+  File "/scratch/msoos/scratch/873994_105/manthan/././manthan.py", line 581, in <module>
+    manthan()
+  File "/scratch/msoos/scratch/873994_105/manthan/././manthan.py", line 280, in manthan
+    weighted_sampling_cnf = computeBias(
+                            ^^^^^^^^^^^^
+  File "/home/msoos/old-manthan/src/generateSamples.py", line 35, in computeBias
+    samples_biased_one = generatesample( args, config, 500, sampling_cnf + sampling_weights_y_1, inputfile_name)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/msoos/old-manthan/src/generateSamples.py", line 106, in generatesample
+    content = f.read()
+              ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+MemoryError

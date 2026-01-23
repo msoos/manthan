@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "./doalarm -t real 3600 ././manthan.py --verb 1 ceiling1024.qdimacs"
+	User time (seconds): 2608.81
+	System time (seconds): 8.08
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 43:55.13
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 9508372
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 658
+	Minor (reclaiming a frame) page faults: 2478511
+	Voluntary context switches: 42946
+	Involuntary context switches: 38033
+	Swaps: 0
+	File system inputs: 699124
+	File system outputs: 693000
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

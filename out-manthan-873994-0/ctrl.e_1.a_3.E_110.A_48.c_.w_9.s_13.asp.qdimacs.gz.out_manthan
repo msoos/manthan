@@ -1,0 +1,21 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 110
+ c count Y (existentially quantified variables) variables 7967
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 1
+ c count of negative unates 0
+ c finding uniquely defined functions
+ c count of uniquely defined variables 7918
+ c generating samples
+Traceback (most recent call last):
+  File "/scratch/msoos/scratch/873994_9/manthan/././manthan.py", line 581, in <module>
+    manthan()
+  File "/scratch/msoos/scratch/873994_9/manthan/././manthan.py", line 287, in manthan
+    samples = generatesample(
+              ^^^^^^^^^^^^^^^
+  File "/home/msoos/old-manthan/src/generateSamples.py", line 115, in generatesample
+    models = np.array(models)
+             ^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 1.50 GiB for an array with shape (80780000,) and data type <U5
