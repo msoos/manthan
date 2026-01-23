@@ -190,40 +190,41 @@ if [ "$all" = "yes" ]; then
             echo "c clearing it"
             rm -r build
         fi
-        mkdir build
-        cd build || exit
-        cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to louvain-community succeeded" || exit
-        make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only louvain-community"
 			rm -rf .cache
-			cd ..
 			rm -rf build
         else
+			mkdir build
+			cd build || exit
+			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to louvain-community succeeded" || exit
+			make clean
             make -j14 && echo "c make to louvain-community succeeded" || exit
             echo "c louvain-community path set done"
 			cd ..
         fi
+        cd ..
 
         echo "c install cryptominisat"
-        cd ..
         cd cryptominisat || exit
         if test -d "build"; then
             echo "c manthan-preproces/cryptominisat/build dir exists."
             echo "c clearing it"
             rm -r build
         fi
-        mkdir build
-        cd build || exit
-        cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit
-        make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only cryptominisat"
 			rm -rf .cache
+			rm -rf build
         else
+			mkdir build
+			cd build || exit
+			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit
+			make clean
             make -j14 && echo "c make to cryptominisat succeeded" || exit
+			cd ..
         fi
-        cd ../..
+        cd ..
 
         echo "c installing preprocess"
         if test -d "build"; then
@@ -232,17 +233,17 @@ if [ "$all" = "yes" ]; then
             rm -r build
         fi
 		git stash
-		patch -p1 < ../preprocess_fix.patch
-        mkdir build
-        cd build || exit
-        cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to preprocess succeeded" || exit
-        make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only preprocess"
 			rm -rf .cache
-			cd ..
 			rm -rf build
+			cd ..
         else
+			patch -p1 < ../preprocess_fix.patch
+			mkdir build
+			cd build || exit
+			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to preprocess succeeded" || exit
+			make clean
             make -j14 && echo "c make to preprocess succeeded" || exit
             preprocess_exe=preprocess
             if test -f "$preprocess_exe"; then
