@@ -1,0 +1,12 @@
+diff --git a/src/graph_plain.h b/src/graph_plain.h
+index 3859b60..0fd4d6a 100644
+--- a/src/graph_plain.h
++++ b/src/graph_plain.h
+@@ -37,6 +37,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <map>
++#include <cstdint>
+ #include <vector>
+ 
+ #define WEIGHTED 0

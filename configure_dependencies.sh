@@ -73,192 +73,195 @@ fi
 
 
 if [ "$all" = "yes" ]; then
-    echo "Going to install all dependencies from the source code"
-        echo "[Dependencies-Path]" >> "$CFG_FILE"
-        source "$CFG_FILE"
+	echo "Going to install all dependencies from the source code"
+    echo "[Dependencies-Path]" >> "$CFG_FILE"
+    source "$CFG_FILE"
 
-        echo "c installing ABC"
-        cd "$abc" || exit
-        make clean
-        rm -f libabc.so
-        rm -f file_generation_cex
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only abc"
+    echo "c installing ABC"
+    cd "$abc" || exit
+    make clean
+    rm -f libabc.so
+    rm -f file_generation_cex
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+        echo "c cleaning only abc"
+    else
+        CFLAGS='-fPIC' make -j14 libabc.so && echo "c make to ABC succeeded" || exit
+        gcc -Wall -g -c file_generation_cex.c -o file_generation_cex.o  && echo "c file_generation_cex complied" || exit
+        g++ -g -o file_generation_cex file_generation_cex.o libabc.so -lm -ldl -lreadline -lpthread && echo "c file_generation_cex linked" || exit
+        file_generation_cex=file_generation_cex
+        ln -s libabc.so ../../
+        if test -f "$file_generation_cex"; then
+            echo "c $file_generation_cex exists."
+            file_generation_cex_path=$(realpath $file_generation_cex)
+            echo "file_generation_cex_path = "$file_generation_cex_path >> "$CFG_FILE"
         else
-            CFLAGS='-fPIC' make -j14 libabc.so && echo "c make to ABC succeeded" || exit
-            gcc -Wall -g -c file_generation_cex.c -o file_generation_cex.o  && echo "c file_generation_cex complied" || exit
-            g++ -g -o file_generation_cex file_generation_cex.o libabc.so -lm -ldl -lreadline -lpthread && echo "c file_generation_cex linked" || exit
-            file_generation_cex=file_generation_cex
-            ln -s libabc.so ../../
-            if test -f "$file_generation_cex"; then
-                echo "c $file_generation_cex exists."
-                file_generation_cex_path=$(realpath $file_generation_cex)
-                echo "file_generation_cex_path = "$file_generation_cex_path >> "$CFG_FILE"
-            else
-                echo "ERROR! could not found $file_generation_cex"
-                echo "ERROR! check ABC install and follow readme in build_dependencies/abc"
-                exit
-            fi
-            echo "c ABC and its dependencies are sucessfully installed"
+            echo "ERROR! could not found $file_generation_cex"
+            echo "ERROR! check ABC install and follow readme in build_dependencies/abc"
+            exit
         fi
+        echo "c ABC and its dependencies are sucessfully installed"
+    fi
 
-        echo "c installing CMSGen"
-        cd "$cmsgen" || exit
-        if test -d "build"; then
-            echo "c CMSGen/build dir exists."
-            echo "c clearing it"
-            rm -r build
-        fi
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only cmsgen"
-			rm -rf .cache
-			rm -rf build
+    echo "c installing CMSGen"
+    cd "$cmsgen" || exit
+    if test -d "build"; then
+        echo "c CMSGen/build dir exists."
+        echo "c clearing it"
+        rm -r build
+    fi
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+        echo "c cleaning only cmsgen"
+		rm -rf .cache
+		rm -rf build
+    else
+		mkdir build
+		cd build || exit
+		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to cmsgen succeeded" || exit
+		make clean
+        make -j14 && echo "c make to cmsgen succeeded" || exit
+        cmsgen_exe=cmsgen
+        if test -f "$cmsgen_exe"; then
+            echo "c $cmsgen_exe exists."
+            cmsgen_path=$(realpath $cmsgen_exe)
+            echo "cmsgen_path = " $cmsgen_path >> "$CFG_FILE"
         else
-			mkdir build
-			cd build || exit
-			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to cmsgen succeeded" || exit
-			make clean
-            make -j14 && echo "c make to cmsgen succeeded" || exit
-            cmsgen_exe=cmsgen
-            if test -f "$cmsgen_exe"; then
-                echo "c $cmsgen_exe exists."
-                cmsgen_path=$(realpath $cmsgen_exe)
-                echo "cmsgen_path = " $cmsgen_path >> "$CFG_FILE"
-            else
-                echo "Error! could not found $cmsgen_exe"
-                echo "Error! check cmsgen install and follow readme in build_dependencies/cmsgen"
-                exit
-            fi
-            echo "c cmsgen and its dependencies are sucessfully installed"
-			cd ..
+            echo "Error! could not found $cmsgen_exe"
+            echo "Error! check cmsgen install and follow readme in build_dependencies/cmsgen"
+            exit
         fi
+        echo "c cmsgen and its dependencies are sucessfully installed"
+		cd ..
+    fi
 
-        echo "c installing Open-WBO"
-        cd "$openwbo" || exit
-        make clean
-		if [ "$ONLY_CLEAN" = "yes" ]; then
-			echo "c cleaning only open-wbo"
-			rm -rf .cache
-			rm -f open-wbo_static
+    echo "c installing Open-WBO"
+    cd "$openwbo" || exit
+    make clean
+	if [ "$ONLY_CLEAN" = "yes" ]; then
+		echo "c cleaning only open-wbo"
+		rm -rf .cache
+		rm -f open-wbo_static
+	else
+		make -j14 rs && echo "c make to open wbo succeeded" || exit
+		wbo=open-wbo
+		if test -f "$wbo"; then
+			echo "c $wbo exists."
+			openwbo_path=$(realpath $wbo)
+			echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
 		else
-			make -j14 rs && echo "c make to open wbo succeeded" || exit
-			wbo=open-wbo
-			if test -f "$wbo"; then
+			if  test -f "$wbo"*; then
 				echo "c $wbo exists."
-				openwbo_path=$(realpath $wbo)
+				echo "c coping it to dependencies folder"
+				openwbo_path=$(realpath $wbo*)
 				echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
 			else
-				if  test -f "$wbo"*; then
-					echo "c $wbo exists."
-					echo "c coping it to dependencies folder"
-					openwbo_path=$(realpath $wbo*)
-					echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
-				else
-					echo "Error! could not found $wbo"
-					echo "Error! check open-wbo install and follow INSTALL in build_dependencies/open-wbo"
-					exit
-				fi
+				echo "Error! could not found $wbo"
+				echo "Error! check open-wbo install and follow INSTALL in build_dependencies/open-wbo"
+				exit
 			fi
-			echo "c open-wbo is sucessfully installed"
 		fi
+		echo "c open-wbo is sucessfully installed"
+		cd ..
+	fi
 
 
-        echo "c installing picosat"
-        cd "$picosat" || exit
-        ./configure.sh && echo "c configuration to picosat succeeded" || exit
-        make clean
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only picosat"
+    echo "c installing picosat"
+    cd "$picosat" || exit
+    ./configure.sh && echo "c configuration to picosat succeeded" || exit
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+		make clean
+        echo "c cleaning only picosat"
+    else
+        make -j14  && echo "c make to picosat succeeded" || exit
+        picosat_exe=picosat
+        if test -f "$picosat_exe"; then
+            echo "c $picosat_exe exists."
+            picosat_path=$(realpath $picosat_exe)
+            echo "picosat_path = " $picosat_path >> "$CFG_FILE"
         else
-            make -j14  && echo "c make to picosat succeeded" || exit
-            picosat_exe=picosat
-            if test -f "$picosat_exe"; then
-                echo "c $picosat_exe exists."
-                picosat_path=$(realpath $picosat_exe)
-                echo "picosat_path = " $picosat_path >> "$CFG_FILE"
-            else
-                echo "Error! could not found $picosat_exe"
-                echo "Error! check picosat install and follow readme in build_dependencies/picosat"
-                exit
-            fi
-            echo "c picosat is sucessfully installed"
+            echo "Error! could not found $picosat_exe"
+            echo "Error! check picosat install and follow readme in build_dependencies/picosat"
+            exit
         fi
+        echo "c picosat is sucessfully installed"
+    fi
 
-        echo "c install preprocess"
-        cd "$preprocess" || exit
-        cd louvain-community || exit
-        if test -d "build"; then
-            echo "c manthan-preproces/louvain-community/build dir exists."
-            echo "c clearing it"
-            rm -r build
-        fi
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only louvain-community"
-			rm -rf .cache
-			rm -rf build
-        else
-			mkdir build
-			cd build || exit
-			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to louvain-community succeeded" || exit
-			make clean
-            make -j14 && echo "c make to louvain-community succeeded" || exit
-            echo "c louvain-community path set done"
-			cd ..
-        fi
-        cd ..
+    echo "c install preprocess"
+    cd "$preprocess" || exit
+    cd louvain-community || exit
+	git stash
+    if test -d "build"; then
+        echo "c manthan-preproces/louvain-community/build dir exists."
+        echo "c clearing it"
+        rm -r build
+    fi
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+        echo "c cleaning only louvain-community"
+		rm -rf .cache
+		rm -rf build
+    else
+		patch -p1 < ../../louvain_fix.patch
+		mkdir build
+		cd build || exit
+		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to louvain-community succeeded" || exit
+		make clean
+        make -j14 && echo "c make to louvain-community succeeded" || exit
+        echo "c louvain-community path set done"
+		cd ..
+    fi
+    cd ..
 
-        echo "c install cryptominisat"
-        cd cryptominisat || exit
-        if test -d "build"; then
-            echo "c manthan-preproces/cryptominisat/build dir exists."
-            echo "c clearing it"
-            rm -r build
-        fi
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only cryptominisat"
-			rm -rf .cache
-			rm -rf build
-        else
-			mkdir build
-			cd build || exit
-			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit
-			make clean
-            make -j14 && echo "c make to cryptominisat succeeded" || exit
-			cd ..
-        fi
-        cd ..
+    echo "c install cryptominisat"
+    cd cryptominisat || exit
+    if test -d "build"; then
+        echo "c manthan-preproces/cryptominisat/build dir exists."
+        echo "c clearing it"
+        rm -r build
+    fi
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+        echo "c cleaning only cryptominisat"
+		rm -rf .cache
+		rm -rf build
+    else
+		mkdir build
+		cd build || exit
+		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit
+		make clean
+        make -j14 && echo "c make to cryptominisat succeeded" || exit
+		cd ..
+    fi
+    cd ..
 
-        echo "c installing preprocess"
-        if test -d "build"; then
-            echo "c manthan-preproces/build dir exists."
-            echo "c clearing it"
-            rm -r build
-        fi
-		git stash
-        if [ "$ONLY_CLEAN" = "yes" ]; then
-            echo "c cleaning only preprocess"
-			rm -rf .cache
-			rm -rf build
-			cd ..
+    echo "c installing preprocess"
+    if test -d "build"; then
+        echo "c manthan-preproces/build dir exists."
+        echo "c clearing it"
+        rm -r build
+    fi
+	git stash
+    if [ "$ONLY_CLEAN" = "yes" ]; then
+        echo "c cleaning only preprocess"
+		rm -rf .cache
+		rm -rf build
+		cd ..
+    else
+		patch -p1 < ../preprocess_fix.patch
+		mkdir build
+		cd build || exit
+		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to preprocess succeeded" || exit
+		make clean
+        make -j14 && echo "c make to preprocess succeeded" || exit
+        preprocess_exe=preprocess
+        if test -f "$preprocess_exe"; then
+            echo "c $preprocess_exe exists."
+            preprocess_path=$(realpath $preprocess_exe)
+            echo "preprocess_path = " $preprocess_path >> "$CFG_FILE"
         else
-			patch -p1 < ../preprocess_fix.patch
-			mkdir build
-			cd build || exit
-			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to preprocess succeeded" || exit
-			make clean
-            make -j14 && echo "c make to preprocess succeeded" || exit
-            preprocess_exe=preprocess
-            if test -f "$preprocess_exe"; then
-                echo "c $preprocess_exe exists."
-                preprocess_path=$(realpath $preprocess_exe)
-                echo "preprocess_path = " $preprocess_path >> "$CFG_FILE"
-            else
-                echo "Error! could not found $preprocess_exe"
-                echo "Error! check preprocess install and follow readme in build_dependencies/preprocess"
-                exit
-            fi
-			cd ..
+            echo "Error! could not found $preprocess_exe"
+            echo "Error! check preprocess install and follow readme in build_dependencies/preprocess"
+            exit
         fi
+		cd ..
+    fi
 else
     echo "Going to use precomplied static binaries from the dependencies/static_bin folder"
 fi
