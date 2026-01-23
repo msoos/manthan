@@ -212,6 +212,7 @@ if [ "$all" = "yes" ]; then
 
     echo "c install cryptominisat"
     cd cryptominisat || exit
+	git stash
     if test -d "build"; then
         echo "c manthan-preproces/cryptominisat/build dir exists."
         echo "c clearing it"
@@ -222,6 +223,7 @@ if [ "$all" = "yes" ]; then
 		rm -rf .cache
 		rm -rf build
     else
+		patch -p1 < ../cms_fix.diff
 		mkdir build
 		cd build || exit
 		cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_PYTHON_INTERFACE=OFF .. && echo "c cmake to cryptominisat succeeded" || exit

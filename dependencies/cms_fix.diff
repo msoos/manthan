@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9f9fdd9d8..604f6d8fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -608,19 +608,6 @@ if (NOT NOBOSPHORUS)
+     endif()
+ endif()
+ 
+-# -----------------------------------------------------------------------------
+-# Look for BreakID
+-# -----------------------------------------------------------------------------
+-find_package(breakid)
+-if (NOT BREAKID_LIBRARIES)
+-    message(WARNING "BreakID NOT found")
+-else()
+-    message(STATUS "BreakID -- found version ${BREAKID_VERSION_MAJOR}.${BREAKID_VERSION_MINOR}")
+-    message(STATUS "BreakID -- libraries: ${BREAKID_LIBRARIES}")
+-    message(STATUS "BreakID -- include dirs: ${BREAKID_INCLUDE_DIRS}")
+-    add_definitions(-DUSE_BREAKID)
+-endif()
+-
+ 
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
