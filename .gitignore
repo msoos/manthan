@@ -7,3 +7,4 @@ variable_mapping.txt
 *.txt
 manthan_dependencies.cfg
 *.cnf
+libabc.so
