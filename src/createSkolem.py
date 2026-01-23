@@ -320,7 +320,7 @@ def verify(args, config, Xvar, Yvar, inputfile_name):
 		os.unlink("strash.txt")
 
 	file_generation_cex = config['Dependencies-Path']['file_generation_cex_path']
-	cmd = "%s %s %s" % (file_generation_cex, errorformula, cexfile)
+	cmd = "%s '%s' '%s'" % (file_generation_cex, errorformula, cexfile)
 	if args.verbose >= 2:
 		print("c file generation cex --verify cmd", cmd)
 
