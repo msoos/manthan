@@ -109,26 +109,28 @@ if [ "$all" = "yes" ]; then
             echo "c clearing it"
             rm -r build
         fi
-        mkdir build
-        cd build || exit
-        cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to cmsgen succeeded" || exit
-        make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only cmsgen"
+			rm -rf .cache
+			rm -rf build
         else
+			mkdir build
+			cd build || exit
+			cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to cmsgen succeeded" || exit
+			make clean
             make -j14 && echo "c make to cmsgen succeeded" || exit
             cmsgen_exe=cmsgen
             if test -f "$cmsgen_exe"; then
                 echo "c $cmsgen_exe exists."
                 cmsgen_path=$(realpath $cmsgen_exe)
                 echo "cmsgen_path = " $cmsgen_path >> "$CFG_FILE"
-
             else
                 echo "Error! could not found $cmsgen_exe"
                 echo "Error! check cmsgen install and follow readme in build_dependencies/cmsgen"
                 exit
             fi
             echo "c cmsgen and its dependencies are sucessfully installed"
+			cd ..
         fi
 
         echo "c installing Open-WBO"
