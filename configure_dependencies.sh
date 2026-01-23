@@ -46,14 +46,15 @@ if test -d "build"; then
     echo "c clearing it"
     rm -r build
 fi
-mkdir build
-cd build || exit
-export PATH=$HOME/.local/bin:$PATH
-cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to unique succeeded" || exit
-make clean
+
 if [ "$ONLY_CLEAN" = "yes" ]; then
     echo "c cleaning only unique"
 else
+	mkdir build
+	cd build || exit
+	export PATH=$HOME/.local/bin:$PATH
+	cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to unique succeeded" || exit
+	make clean
     make -j14 && echo "c make to unique succeeded" || exit
     if test -f "interpolatingsolver/src/itp."*; then
         echo "c found itp module"
@@ -133,25 +134,31 @@ if [ "$all" = "yes" ]; then
         echo "c installing Open-WBO"
         cd "$openwbo" || exit
         make clean
-        make rs && echo "c make to open wbo succeeded" || exit
-        wbo=open-wbo
-        if test -f "$wbo"; then
-            echo "c $wbo exists."
-            openwbo_path=$(realpath $wbo)
-            echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
-        else
-            if  test -f "$wbo"*; then
-                echo "c $wbo exists."
-                echo "c coping it to dependencies folder"
-                openwbo_path=$(realpath $wbo*)
-                echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
-            else
-                echo "Error! could not found $wbo"
-                echo "Error! check open-wbo install and follow INSTALL in build_dependencies/open-wbo"
-                exit
-            fi
-        fi
-        echo "c open-wbo is sucessfully installed"
+		if [ "$ONLY_CLEAN" = "yes" ]; then
+			echo "c cleaning only open-wbo"
+			rm -rf .cache
+			rm -f open-wbo_static
+		else
+			make -j14 rs && echo "c make to open wbo succeeded" || exit
+			wbo=open-wbo
+			if test -f "$wbo"; then
+				echo "c $wbo exists."
+				openwbo_path=$(realpath $wbo)
+				echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
+			else
+				if  test -f "$wbo"*; then
+					echo "c $wbo exists."
+					echo "c coping it to dependencies folder"
+					openwbo_path=$(realpath $wbo*)
+					echo "openwbo_path = " $openwbo_path >> "$CFG_FILE"
+				else
+					echo "Error! could not found $wbo"
+					echo "Error! check open-wbo install and follow INSTALL in build_dependencies/open-wbo"
+					exit
+				fi
+			fi
+			echo "c open-wbo is sucessfully installed"
+		fi
 
 
         echo "c installing picosat"
@@ -161,7 +168,7 @@ if [ "$all" = "yes" ]; then
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only picosat"
         else
-            make -j4  && echo "c make to picosat succeeded" || exit
+            make -j14  && echo "c make to picosat succeeded" || exit
             picosat_exe=picosat
             if test -f "$picosat_exe"; then
                 echo "c $picosat_exe exists."
@@ -189,13 +196,17 @@ if [ "$all" = "yes" ]; then
         make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only louvain-community"
+			rm -rf .cache
+			cd ..
+			rm -rf build
         else
             make -j14 && echo "c make to louvain-community succeeded" || exit
             echo "c louvain-community path set done"
+			cd ..
         fi
 
         echo "c install cryptominisat"
-        cd ../..
+        cd ..
         cd cryptominisat || exit
         if test -d "build"; then
             echo "c manthan-preproces/cryptominisat/build dir exists."
@@ -208,6 +219,7 @@ if [ "$all" = "yes" ]; then
         make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only cryptominisat"
+			rm -rf .cache
         else
             make -j14 && echo "c make to cryptominisat succeeded" || exit
         fi
@@ -227,6 +239,9 @@ if [ "$all" = "yes" ]; then
         make clean
         if [ "$ONLY_CLEAN" = "yes" ]; then
             echo "c cleaning only preprocess"
+			rm -rf .cache
+			cd ..
+			rm -rf build
         else
             make -j14 && echo "c make to preprocess succeeded" || exit
             preprocess_exe=preprocess
@@ -239,6 +254,7 @@ if [ "$all" = "yes" ]; then
                 echo "Error! check preprocess install and follow readme in build_dependencies/preprocess"
                 exit
             fi
+			cd ..
         fi
 else
     echo "Going to use precomplied static binaries from the dependencies/static_bin folder"
