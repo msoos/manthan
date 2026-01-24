@@ -1,0 +1,21 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 256
+ c count Y (existentially quantified variables) variables 1022
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 1
+ c finding uniquely defined functions
+ c count of uniquely defined variables 890
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+Error running file generation cex
+exit_code: 1
+stderr: 
+stdout: intermediate128_errorformula.v (line 11066): Parse_FormulaParser(): Different number of opening and closing parentheses ().
+Reading network from file has failed.
+Error: Empty network.
+Cannot execute command "strash".
+

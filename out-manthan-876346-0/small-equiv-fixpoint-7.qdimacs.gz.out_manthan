@@ -1,0 +1,21 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 256
+ c count Y (existentially quantified variables) variables 14842
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 90
+ c count of negative unates 2355
+ c finding uniquely defined functions
+ c count of uniquely defined variables 11693
+ c generating samples
+Traceback (most recent call last):
+  File "/scratch/msoos/scratch/876346_1/manthan/././manthan.py", line 581, in <module>
+    manthan()
+  File "/scratch/msoos/scratch/876346_1/manthan/././manthan.py", line 287, in manthan
+    samples = generatesample(
+              ^^^^^^^^^^^^^^^
+  File "/home/msoos/manthan/src/generateSamples.py", line 114, in generatesample
+    models = content.split(" ")
+             ^^^^^^^^^^^^^^^^^^
+MemoryError

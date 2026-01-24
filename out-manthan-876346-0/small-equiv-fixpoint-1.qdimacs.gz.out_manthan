@@ -1,0 +1,15 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 64
+ c count Y (existentially quantified variables) variables 2942
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 18
+ c count of negative unates 471
+ c finding uniquely defined functions
+ c count of uniquely defined variables 2325
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+ c number of maximum allowed repair iteration reached
+ c could not synthesize functions

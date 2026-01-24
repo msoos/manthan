@@ -1,0 +1,23 @@
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 bobtuint31neg_all_bit_differing_from_cycle.qdimacs"
+	User time (seconds): 57.47
+	System time (seconds): 3.89
+	Percent of CPU this job got: 93%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:05.39
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1823212
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 549
+	Minor (reclaiming a frame) page faults: 872208
+	Voluntary context switches: 15780
+	Involuntary context switches: 40929
+	Swaps: 0
+	File system inputs: 187808
+	File system outputs: 198568
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

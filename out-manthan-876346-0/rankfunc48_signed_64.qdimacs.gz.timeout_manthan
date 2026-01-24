@@ -1,0 +1,24 @@
+Command terminated by signal 14
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 rankfunc48_signed_64.qdimacs"
+	User time (seconds): 6877.05
+	System time (seconds): 75.06
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:00:00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6952268
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 109
+	Minor (reclaiming a frame) page faults: 22402883
+	Voluntary context switches: 1074630
+	Involuntary context switches: 313915
+	Swaps: 0
+	File system inputs: 8874800
+	File system outputs: 10625576
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 kenflashp01_all_bit_differing_from_cycle.qdimacs"
+	User time (seconds): 720.96
+	System time (seconds): 63.20
+	Percent of CPU this job got: 64%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 20:12.97
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 501920
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 215
+	Minor (reclaiming a frame) page faults: 45810696
+	Voluntary context switches: 2063142
+	Involuntary context switches: 396416
+	Swaps: 0
+	File system inputs: 12422696
+	File system outputs: 22535696
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

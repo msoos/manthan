@@ -1,0 +1,26 @@
+c WARNING: Empty line at line number 10135 -- this is not part of the DIMACS specifications (http://www.satcompetition.org/2009/format-benchmarks2009.html). Ignoring.
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 120
+ c count Y (existentially quantified variables) variables 2759
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 1
+ c finding uniquely defined functions
+Traceback (most recent call last):
+  File "/scratch/msoos/scratch/876346_80/manthan/././manthan.py", line 581, in <module>
+    manthan()
+  File "/scratch/msoos/scratch/876346_80/manthan/././manthan.py", line 182, in manthan
+    UniqueVars, UniqueDef, dg = find_unique_function(args,
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/msoos/manthan/src/callUnique.py", line 61, in find_unique_function
+    defination = UniqueChecker.checkDefinability( Xvar + definingYvar, int(yvar), offset)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/msoos/manthan/src/DefinabilityChecker.py", line 92, in checkDefinability
+    satisfiable = self.solver.solve(assumptions_complete)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/msoos/manthan/src/InterpolatingSolver.py", line 39, in solve
+    return self.solver.solve(Utils.miniSAT_literals(assumptions))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Caught an unknown exception!

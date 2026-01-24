@@ -1,0 +1,24 @@
+Command terminated by signal 14
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 ctrl.e#1.a#3.E#124.A#48.c#.w#7.s#50.asp.qdimacs"
+	User time (seconds): 6556.65
+	System time (seconds): 112.62
+	Percent of CPU this job got: 92%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:00:00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 9173236
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 406
+	Minor (reclaiming a frame) page faults: 82940842
+	Voluntary context switches: 2367207
+	Involuntary context switches: 479115
+	Swaps: 0
+	File system inputs: 74547456
+	File system outputs: 78125824
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

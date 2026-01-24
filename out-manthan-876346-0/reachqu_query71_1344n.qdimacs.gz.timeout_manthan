@@ -1,0 +1,24 @@
+Command terminated by signal 14
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 reachqu_query71_1344n.qdimacs"
+	User time (seconds): 6649.97
+	System time (seconds): 445.30
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:00:00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 7324312
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 803
+	Minor (reclaiming a frame) page faults: 26569563
+	Voluntary context switches: 434932
+	Involuntary context switches: 82671
+	Swaps: 0
+	File system inputs: 9208064
+	File system outputs: 9442496
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,24 @@
+Command terminated by signal 14
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 mult_bool_matrix_dyn_9_5.sat.qdimacs"
+	User time (seconds): 6683.87
+	System time (seconds): 72.19
+	Percent of CPU this job got: 93%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:00:00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4630928
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 533
+	Minor (reclaiming a frame) page faults: 44147923
+	Voluntary context switches: 1608289
+	Involuntary context switches: 281653
+	Swaps: 0
+	File system inputs: 28881472
+	File system outputs: 36947168
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,22 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 130
+ c count Y (existentially quantified variables) variables 461
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 1
+ c finding uniquely defined functions
+ c count of uniquely defined variables 420
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+Error running file generation cex
+exit_code: 1
+stderr: 
+stdout: Ver_StreamGetWord(): The buffer size is exceeded.
+pdtpmsrotate32_errorformula.v (line 74675): Cannot read the equation for w442.
+Reading network from file has failed.
+Error: Empty network.
+Cannot execute command "strash".
+

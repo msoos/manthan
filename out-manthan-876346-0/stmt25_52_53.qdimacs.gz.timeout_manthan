@@ -1,0 +1,23 @@
+	Command being timed: "./doalarm -t real 7200 ././manthan.py --verb 1 stmt25_52_53.qdimacs"
+	User time (seconds): 53.76
+	System time (seconds): 4.98
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:01.06
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2215516
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 192
+	Minor (reclaiming a frame) page faults: 798703
+	Voluntary context switches: 12046
+	Involuntary context switches: 7196
+	Swaps: 0
+	File system inputs: 223496
+	File system outputs: 221264
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

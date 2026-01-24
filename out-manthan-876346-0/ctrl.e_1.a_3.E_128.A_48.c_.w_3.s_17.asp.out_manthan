@@ -1,0 +1,13 @@
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+Traceback (most recent call last):
+  File "/scratch/msoos/scratch/876346_607/manthan/././manthan.py", line 581, in <module>
+    manthan()
+  File "/scratch/msoos/scratch/876346_607/manthan/././manthan.py", line 76, in manthan
+    Xvar, Yvar, qdimacs_list, dg = parse(args)
+                                   ^^^^^^^^^^^
+  File "/home/msoos/manthan/src/preprocess.py", line 33, in parse
+    with open(args.input) as f:
+         ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ctrl.e_1.a_3.E_128.A_48.c_.w_3.s_17.asp'

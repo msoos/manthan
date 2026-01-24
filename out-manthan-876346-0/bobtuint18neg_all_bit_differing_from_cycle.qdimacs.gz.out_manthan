@@ -1,0 +1,19 @@
+c WARNING: Empty line at line number 4593 -- this is not part of the DIMACS specifications (http://www.satcompetition.org/2009/format-benchmarks2009.html). Ignoring.
+ c configuring dependency paths
+ c starting Manthan
+ c parsing
+ c count X (universally quantified variables) variables 432
+ c count Y (existentially quantified variables) variables 1204
+ c preprocessing: finding unates (constant functions)
+ c count of positive unates 3
+ c count of negative unates 1
+ c finding uniquely defined functions
+ c count of uniquely defined variables 994
+ c generating samples
+ c generated samples.. learning candidate functions via decision learning
+ c generated candidate functions for all variables.
+ c verification check UNSAT
+ c no more repair needed
+ c number of repairs needed to converge 0
+ c Total time taken 59.12697720527649
+Skolem functions are stored at bobtuint18neg_all_bit_differing_from_cycle_skolem.v
