@@ -70,6 +70,24 @@ c Total time taken 4.825810670852661
 Skolem functions are stored at factorization8_skolem.v
 ```
 
+## Results
+
+You will find two directories here, with the logfiles of two runs of Manthan on
+the [CNF benchmark](https://zenodo.org/records/3892859#.XuTB2XUzZhE) published by the authors:
+```
+ out-manthan-873994-0
+ out-manthan-876346-0
+```
+The first directory contains a run with a memory limit of 10GB, the second with
+a memory limit of 20GB (and open-wbo compiled in release mode). The
+`.out_manthan` files contain the logs of the runs by the tool itself, and the
+`.timeout_manthan` files contain the logs from the `/usr/bin/time -v` command
+that was used to measure time and memory consumption of the python process.
+Notice that the python process launches subprocesses, and the 10GB and 20GB
+limits were imposed only on a per-process basis, hence the total memory
+consumption can be up to 2x that, given that the manthan.py process typically
+has one subprocess running at any time.
+
 ## Original Authors
 * Priyanka Golia (pgoila@cse.iitk.ac.in)
 * Subhajit Roy (subhajit@cse.iitk.ac.in)
