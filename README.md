@@ -73,7 +73,7 @@ Skolem functions are stored at factorization8_skolem.v
 ## Results
 
 You will find two directories here, with the logfiles of two runs of Manthan on
-the [CNF benchmark](https://zenodo.org/records/3892859#.XuTB2XUzZhE) published by the authors:
+the [CNF benchmarks](https://zenodo.org/records/3892859#.XuTB2XUzZhE) published by the authors:
 ```
  out-manthan-873994-0
  out-manthan-876346-0
