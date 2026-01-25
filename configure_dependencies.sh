@@ -53,7 +53,7 @@ else
     mkdir build
     cd build || exit
     export PATH=$HOME/.local/bin:$PATH
-    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to unique succeeded" || exit
+    cmake -DCMAKE_BUILD_TYE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && echo "c cmake to unique succeeded" || exit
     make clean
     make -j14 && echo "c make to unique succeeded" || exit
     if test -f "interpolatingsolver/src/itp."*; then
@@ -142,6 +142,7 @@ if [ "$all" = "yes" ]; then
         echo "c cleaning only open-wbo"
         rm -rf .cache
         rm -f open-wbo_static
+        rm -f open-wbo
     else
         make -j14 r && echo "c make to open wbo succeeded" || exit
         wbo=open-wbo
