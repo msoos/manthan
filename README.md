@@ -28,7 +28,6 @@ git submodule update --init --recursive
 python3 -m venv manthan-venv
 source manthan-venv/bin/activate
 python -m pip install -r requirements.txt
-sudo python -m pip install -r requirements.txt
 ./configure_dependencies.sh --all
 ```
 
